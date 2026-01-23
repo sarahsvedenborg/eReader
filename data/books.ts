@@ -3,6 +3,7 @@
  * Add new books here by importing their text and adding to the books array
  */
 
+import { aRoomWithAView } from './a-room-with-a-view';
 import { prideAndPrejudice } from './pride-and-prejudice';
 
 export interface Book {
@@ -18,6 +19,12 @@ export const books: Book[] = [
     title: 'Pride and Prejudice',
     author: 'Jane Austen',
     text: prideAndPrejudice,
+  },
+  {
+    id: 'a-room-with-a-view',
+    title: 'A Room with a View',
+    author: 'E.M. Forster',
+    text: aRoomWithAView,
   },
   // Add more books here as you import them
   // Example:
