@@ -52,16 +52,26 @@
 
 .text {
   font-family: Georgia, 'Times New Roman', serif;
-  font-size: 1.125rem;
+  font-size: 20px;
   line-height: 1.8;
   color: #1a1a1a;
   text-align: justify;
   flex: 1;
   overflow: hidden;
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
   padding: 1rem 0;
+}
 
+.paragraph {
+  /*   margin: 0 0 1.5em 0; */
+  text-align: justify;
+  text-indent: 15px;
+}
+
+.paragraph:last-child {
+  margin-bottom: 0;
 }
 
 .footer {
@@ -70,8 +80,7 @@
   align-items: center;
   padding-top: 1.5rem;
   border-top: 1px solid #e0e0e0;
-  margin-top: 1rem;
-  display: none;
+  /*   margin-top: 1rem; */
 }
 
 .pageInfo {
@@ -83,6 +92,7 @@
 .controls {
   display: flex;
   gap: 0.75rem;
+  display: none;
 }
 
 .button {
@@ -135,9 +145,10 @@
   }
 
   .text {
-    font-size: 1rem;
+    font-size: 21px;
     line-height: 1.7;
     padding: 0.5rem 0;
+    height: 600px;
   }
 
   .footer {

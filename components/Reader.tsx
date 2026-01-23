@@ -73,7 +73,11 @@ export default function Reader({ pages, bookId = 'default' }: ReaderProps) {
           ← Library
         </Link>
         <div className={styles.text}>
-          {pages[currentPage]}
+          {pages[currentPage].split('\n\n').map((paragraph, index) => (
+            <p key={index} className={styles.paragraph}>
+              {paragraph}
+            </p>
+          ))}
         </div>
         
         <div className={styles.footer}>

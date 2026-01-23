@@ -18,7 +18,7 @@ export default function BookPage({ params }: BookPageProps) {
 
   // Paginate the book text
   // 250 words per page provides a comfortable reading experience
-  const pages = paginateText(book.text, 130);
+  const pages = paginateText(book.text, 80);
 
   return (
     <main>
