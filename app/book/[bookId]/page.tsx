@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import Reader from '@/components/Reader';
-import { paginateText } from '@/lib/paginateText';
+import { paginateText, paginateChapters, PageInfo } from '@/lib/paginateText';
 import { getBookById } from '@/data/books';
 
 interface BookPageProps {
@@ -16,9 +16,25 @@ export default function BookPage({ params }: BookPageProps) {
     notFound();
   }
 
-  // Paginate the book text
-  // 250 words per page provides a comfortable reading experience
-  const pages = paginateText(book.text, 80);
+  // Use chapter-based structure if available, otherwise fall back to full text
+  let pages: PageInfo[];
+
+  if (book.chapters && book.chapters.length > 0) {
+    // Paginate chapters (130 words per page)
+    pages = paginateChapters(book.chapters, 130);
+  } else if (book.text) {
+    // Legacy: paginate full text and create page info without chapter data
+    const textPages = paginateText(book.text, 130);
+    pages = textPages.map((text, index) => ({
+      text,
+      chapterIndex: 0,
+      chapterTitle: 'Chapter 1',
+      pageInChapter: index + 1,
+      totalPagesInChapter: textPages.length,
+    }));
+  } else {
+    notFound();
+  }
 
   return (
     <main>

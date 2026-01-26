@@ -3,9 +3,10 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from './Reader.module.css';
+import { PageInfo } from '@/lib/paginateText';
 
 interface ReaderProps {
-  pages: string[];
+  pages: PageInfo[];
   bookId?: string; // Optional ID for localStorage key
 }
 
@@ -18,7 +19,7 @@ interface ReaderProps {
  */
 export default function Reader({ pages, bookId = 'default' }: ReaderProps) {
   const storageKey = `ereader-${bookId}-page`;
-  
+
   // Initialize with saved page or first page
   const [currentPage, setCurrentPage] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -66,6 +67,10 @@ export default function Reader({ pages, bookId = 'default' }: ReaderProps) {
     return <div className={styles.container}>No content available</div>;
   }
 
+  const currentPageInfo = pages[currentPage];
+  const pagesLeftInChapter = currentPageInfo.totalPagesInChapter - currentPageInfo.pageInChapter;
+  const isFirstPageOfChapter = currentPageInfo.pageInChapter === 1;
+
   return (
     <div className={styles.container} onClick={handleScreenTap}>
       <div className={styles.content}>
@@ -73,18 +78,35 @@ export default function Reader({ pages, bookId = 'default' }: ReaderProps) {
           ← Library
         </Link>
         <div className={styles.text}>
-          {pages[currentPage].split('\n\n').map((paragraph, index) => (
-            <p key={index} className={styles.paragraph}>
-              {paragraph}
-            </p>
-          ))}
+          {isFirstPageOfChapter && (
+            <h2 className={styles.chapterHeading}>{currentPageInfo.chapterTitle}</h2>
+          )}
+          {currentPageInfo.text.split('\n\n').map((paragraph, index) => {
+            const isFirstParagraph = index === 0;
+            const shouldIndent = !isFirstPageOfChapter || !isFirstParagraph;
+            return (
+              <p
+                key={index}
+                className={`${styles.paragraph} ${shouldIndent ? '' : styles.noIndent}`}
+              >
+                {paragraph}
+              </p>
+            );
+          })}
         </div>
-        
+
         <div className={styles.footer}>
           <div className={styles.pageInfo}>
-            {currentPage + 1} / {pages.length}
+            {pagesLeftInChapter > 0 && (
+              <div className={styles.chapterInfo}>
+                {pagesLeftInChapter} page{pagesLeftInChapter !== 1 ? 's' : ''} left in {currentPageInfo.chapterTitle}
+              </div>
+            )}
+            <div className={styles.pageNumbers}>
+              {currentPage + 1} / {pages.length}
+            </div>
           </div>
-          
+
           <div className={styles.controls}>
             <button
               onClick={(e) => {

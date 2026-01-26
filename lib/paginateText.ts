@@ -69,3 +69,40 @@ export function paginateText(text: string, wordsPerPage: number = 250): string[]
   return pages;
 }
 
+/**
+ * Paginates chapters and returns pages with chapter information
+ * 
+ * @param chapters - Array of chapter objects with title and text
+ * @param wordsPerPage - Number of words per page (default: 250)
+ * @returns Array of page info objects with text and chapter data
+ */
+export interface PageInfo {
+  text: string;
+  chapterIndex: number;
+  chapterTitle: string;
+  pageInChapter: number;
+  totalPagesInChapter: number;
+}
+
+export function paginateChapters(
+  chapters: Array<{ title: string; text: string }>,
+  wordsPerPage: number = 250
+): PageInfo[] {
+  const pages: PageInfo[] = [];
+
+  chapters.forEach((chapter, chapterIndex) => {
+    const chapterPages = paginateText(chapter.text, wordsPerPage);
+
+    chapterPages.forEach((pageText, pageIndex) => {
+      pages.push({
+        text: pageText,
+        chapterIndex,
+        chapterTitle: chapter.title,
+        pageInChapter: pageIndex + 1,
+        totalPagesInChapter: chapterPages.length,
+      });
+    });
+  });
+
+  return pages;
+}
