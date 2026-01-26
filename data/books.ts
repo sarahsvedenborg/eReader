@@ -4,13 +4,20 @@
  */
 
 import { aRoomWithAView } from './a-room-with-a-view';
+import { aroomwithaviewChapters } from './a-room-with-a-view-chapters';
 import { prideAndPrejudice } from './pride-and-prejudice';
+
+export interface Chapter {
+  title: string;
+  text: string;
+}
 
 export interface Book {
   id: string;
   title: string;
   author: string;
-  text: string;
+  text?: string; // Legacy: full text (will be deprecated in favor of chapters)
+  chapters?: Chapter[]; // New: chapter-based structure
 }
 
 export const books: Book[] = [
@@ -25,6 +32,7 @@ export const books: Book[] = [
     title: 'A Room with a View',
     author: 'E.M. Forster',
     text: aRoomWithAView,
+    chapters: aroomwithaviewChapters,
   },
   // Add more books here as you import them
   // Example:
