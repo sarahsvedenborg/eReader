@@ -21,10 +21,10 @@ export default function BookPage({ params }: BookPageProps) {
 
   if (book.chapters && book.chapters.length > 0) {
     // Paginate chapters (130 words per page)
-    pages = paginateChapters(book.chapters, 130);
+    pages = paginateChapters(book.chapters, 120);
   } else if (book.text) {
     // Legacy: paginate full text and create page info without chapter data
-    const textPages = paginateText(book.text, 130);
+    const textPages = paginateText(book.text, 120);
     pages = textPages.map((text, index) => ({
       text,
       chapterIndex: 0,
