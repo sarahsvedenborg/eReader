@@ -26,8 +26,11 @@ export async function GET(
   }
 
   try {
-    const url = new URL(`${API_BASE_URL}/api/books/${bookId}/text`);
+    const url = new URL(`${API_BASE_URL}/books/${bookId}/text`);
     url.searchParams.set('cleaning_mode', cleaningMode);
+
+    console.log('Fetching book text from:', url.toString());
+    console.log('Book ID:', bookId);
 
     const response = await fetch(url.toString(), {
       headers: {
@@ -36,11 +39,20 @@ export async function GET(
       },
     });
 
+    console.log('Book text response status:', response.status);
+
     if (!response.ok) {
       const errorText = await response.text();
+      let errorMessage = `Failed to fetch book text: ${response.statusText}`;
+      try {
+        const errorJson = JSON.parse(errorText);
+        errorMessage = errorJson.message || errorMessage;
+      } catch {
+        errorMessage = errorText || errorMessage;
+      }
       console.error('Gutenberg API error:', response.status, errorText);
       return NextResponse.json(
-        { error: `Failed to fetch book text: ${response.statusText}` },
+        { error: errorMessage },
         { status: response.status }
       );
     }

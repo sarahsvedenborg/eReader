@@ -20,29 +20,25 @@ async function getGutenbergBook(bookId: string): Promise<GutenbergBookTextRespon
   }
 
   try {
-    // Call the Gutenberg API directly from server-side
-    const API_BASE_URL = 'https://project-gutenberg-free-books-api1.p.rapidapi.com';
-    const API_KEY = process.env.NEXT_PUBLIC_GUTENBERG_API_KEY;
-
-    if (!API_KEY) {
-      console.error('Gutenberg API key not configured');
-      return null;
-    }
-
-    const url = new URL(`${API_BASE_URL}/api/books/${gutenbergId}/text`);
+    // Use our API route which handles the RapidAPI call
+    // Construct the URL - in server components we need to use absolute URL
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const url = new URL(`/api/gutenberg/book/${gutenbergId}/text`, baseUrl);
     url.searchParams.set('cleaning_mode', 'simple');
 
+    console.log('Fetching Gutenberg book via API route:', url.toString());
+    console.log('Gutenberg ID:', gutenbergId);
+
     const response = await fetch(url.toString(), {
-      headers: {
-        'X-RapidAPI-Key': API_KEY,
-        'X-RapidAPI-Host': 'project-gutenberg-free-books-api1.p.rapidapi.com',
-      },
       // Disable caching for dynamic content
       cache: 'no-store',
     });
 
+    console.log('Response status:', response.status);
+
     if (!response.ok) {
-      console.error('Failed to fetch Gutenberg book:', response.status, response.statusText);
+      const errorData = await response.json().catch(() => ({ error: response.statusText }));
+      console.error('Failed to fetch Gutenberg book:', response.status, errorData);
       return null;
     }
 
