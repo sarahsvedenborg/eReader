@@ -8,6 +8,7 @@ import { PageInfo } from '@/lib/paginateText';
 interface ReaderProps {
   pages: PageInfo[];
   bookId?: string; // Optional ID for localStorage key
+  bookTitle?: string; // Optional book title for display
 }
 
 /**

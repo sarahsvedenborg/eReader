@@ -11,9 +11,14 @@ export default function Home() {
         <h1 className={styles.title}>My Library</h1>
         <p className={styles.subtitle}>Select a book to start reading</p>
         
-        <Link href="/extract-chapters" className={styles.extractButton}>
-          Extract Chapters from Book
-        </Link>
+        <div className={styles.actions}>
+          <Link href="/search" className={styles.searchButton}>
+            🔍 Search Project Gutenberg
+          </Link>
+          <Link href="/extract-chapters" className={styles.extractButton}>
+            Extract Chapters from Book
+          </Link>
+        </div>
         
         <div className={styles.bookList}>
           {books.length === 0 ? (
